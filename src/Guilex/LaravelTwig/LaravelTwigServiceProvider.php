@@ -28,7 +28,17 @@ class LaravelTwigServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app['twig'] = $this->app->share(function($app){
+			
+			$template_config = $app['config']->get('laravel-twig::config');
+
+			$loader = new \Twig_Loader_Filesystem($template_config['template_dir']);
+			$twig = new \Twig_Environment($loader, array(
+    			'cache' => $template_config['cache_dir']
+)			);
+
+			return $twig;
+		});
 	}
 
 	/**
